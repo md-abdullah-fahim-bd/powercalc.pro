@@ -219,8 +219,8 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* User Registration Screen */
-        .registration-screen {
+        /* User Authentication Screen */
+        .auth-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -232,26 +232,28 @@
             align-items: center;
             z-index: 9998;
             padding: 20px;
+            overflow-y: auto; /* Allow scrolling for smaller screens */
         }
 
-        .registration-screen.show {
+        .auth-screen.show {
             display: flex;
         }
 
-        .registration-card {
+        .auth-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: var(--border-radius);
-            padding: 3rem;
+            padding: 2rem;
             box-shadow: var(--shadow-xl);
             max-width: 500px;
             width: 100%;
             text-align: center;
             animation: slideUp 0.8s ease-out;
+            margin: 20px 0; /* Add margin for scrolling */
         }
 
-        .registration-logo {
+        .auth-logo {
             width: 80px;
             height: 80px;
             background: rgba(255, 255, 255, 0.1);
@@ -265,13 +267,13 @@
             border: 2px solid rgba(102, 126, 234, 0.2);
         }
 
-        .registration-logo img {
+        .auth-logo img {
             width: 50px;
             height: 50px;
             object-fit: contain;
         }
 
-        .registration-title {
+        .auth-title {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
@@ -281,13 +283,13 @@
             background-clip: text;
         }
 
-        .registration-subtitle {
+        .auth-subtitle {
             color: var(--text-secondary);
             margin-bottom: 2rem;
             font-size: 1.1rem;
         }
 
-        .registration-form {
+        .auth-form {
             text-align: left;
         }
 
@@ -318,7 +320,7 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .register-btn {
+        .auth-btn {
             width: 100%;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: var(--text-light);
@@ -332,9 +334,73 @@
             margin-top: 1rem;
         }
 
-        .register-btn:hover {
+        .auth-btn:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
+        }
+
+        .social-auth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1rem;
+        }
+
+        .social-auth-btn:hover {
+            background-color: var(--bg-secondary);
+            border-color: var(--primary-color);
+        }
+
+        .social-auth-btn img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .or-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .or-divider:not(:empty)::before {
+            margin-right: .5em;
+        }
+
+        .or-divider:not(:empty)::after {
+            margin-left: .5em;
+        }
+
+        .auth-error {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        #recaptcha-container {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
         }
 
         .container {
@@ -361,6 +427,9 @@
             box-shadow: var(--shadow-md);
             text-align: center;
             animation: slideDown 0.8s ease-out;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .welcome-message {
@@ -373,6 +442,21 @@
         .user-info {
             color: var(--text-secondary);
             font-size: 0.9rem;
+        }
+
+        .sign-out-btn {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sign-out-btn:hover {
+            background: #dc2626;
         }
 
         /* PWA Install Banner */
@@ -867,7 +951,7 @@
                 font-size: 0.7rem;
             }
 
-            .registration-card {
+            .auth-card {
                 padding: 2rem;
                 margin: 1rem;
             }
@@ -942,23 +1026,77 @@
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- User Registration Screen -->
-    <div class="registration-screen" id="registrationScreen">
-        <div class="registration-card">
-            <div class="registration-logo">
+    <!-- User Authentication Screen -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-card">
+            <div class="auth-logo">
                 <img src="https://i.ibb.co.com/4RwDKSd1/A-removebg-preview.png" alt="PowerCalc Pro Logo" crossorigin="anonymous">
             </div>
-            <h2 class="registration-title" data-en="Welcome to PowerCalc Pro" data-bn="পাওয়ারক্যালক প্রো-তে স্বাগতম">Welcome to PowerCalc Pro</h2>
-            <p class="registration-subtitle" data-en="Let's personalize your experience! Please provide your details to get started." data-bn="আসুন আপনার অভিজ্ঞতা ব্যক্তিগত করি! শুরু করতে আপনার বিবরণ প্রদান করুন।">Let's personalize your experience! Please provide your details to get started.</p>
+            <h2 class="auth-title" data-en="Welcome to PowerCalc Pro" data-bn="পাওয়ারক্যালক প্রো-তে স্বাগতম">Welcome to PowerCalc Pro</h2>
+            <p class="auth-subtitle" data-en="Sign in or create an account to get started!" data-bn="শুরু করতে সাইন ইন করুন অথবা একটি অ্যাকাউন্ট তৈরি করুন!">Sign in or create an account to get started!</p>
             
-            <form class="registration-form" id="registrationForm">
+            <div class="auth-error" id="authError"></div>
+
+            <!-- Google Sign-in -->
+            <button class="social-auth-btn" id="googleSignInBtn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_of_Google_G_Suite.png" alt="Google logo">
+                <span data-en="Sign in with Google" data-bn="গুগল দিয়ে সাইন ইন করুন">Sign in with Google</span>
+            </button>
+
+            <div class="or-divider" data-en="OR" data-bn="অথবা">OR</div>
+
+            <!-- Email/Password Authentication -->
+            <form class="auth-form" id="emailAuthForm">
+                <div class="form-group">
+                    <label for="authEmail" data-en="Email" data-bn="ইমেল">Email</label>
+                    <input type="email" id="authEmail" data-en-placeholder="your@example.com" data-bn-placeholder="আপনার@উদাহরণ.কম" placeholder="your@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="authPassword" data-en="Password" data-bn="পাসওয়ার্ড">Password</label>
+                    <input type="password" id="authPassword" data-en-placeholder="Enter your password" data-bn-placeholder="আপনার পাসওয়ার্ড লিখুন" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="auth-btn" id="signInBtn">
+                    <span id="signInBtnText" data-en="Sign In" data-bn="সাইন ইন করুন">Sign In</span>
+                    <span id="signInBtnLoading" class="loading hidden"></span>
+                </button>
+                <button type="button" class="auth-btn" id="signUpBtn" style="background: var(--accent-color); margin-top: 0.5rem;">
+                    <span id="signUpBtnText" data-en="Sign Up" data-bn="সাইন আপ করুন">Sign Up</span>
+                    <span id="signUpBtnLoading" class="loading hidden"></span>
+                </button>
+            </form>
+
+            <div class="or-divider" data-en="OR" data-bn="অথবা">OR</div>
+
+            <!-- Phone Authentication -->
+            <form class="auth-form" id="phoneAuthForm">
+                <div class="form-group">
+                    <label for="phoneNumber" data-en="Phone Number" data-bn="ফোন নম্বর">Phone Number</label>
+                    <input type="tel" id="phoneNumber" data-en-placeholder="+8801XXXXXXXXX" data-bn-placeholder="+8801XXXXXXXXX" placeholder="+8801XXXXXXXXX" required>
+                </div>
+                <button type="button" class="auth-btn" id="sendOtpBtn">
+                    <span id="sendOtpBtnText" data-en="Send OTP" data-bn="ওটিপি পাঠান">Send OTP</span>
+                    <span id="sendOtpBtnLoading" class="loading hidden"></span>
+                </button>
+                <div class="form-group hidden" id="otpInputGroup">
+                    <label for="otpCode" data-en="Verification Code (OTP)" data-bn="যাচাইকরণ কোড (ওটিপি)">Verification Code (OTP)</label>
+                    <input type="text" id="otpCode" data-en-placeholder="Enter OTP" data-bn-placeholder="ওটিপি লিখুন" required>
+                </div>
+                <button type="button" class="auth-btn hidden" id="verifyOtpBtn" style="background: var(--success-color);">
+                    <span id="verifyOtpBtnText" data-en="Verify OTP" data-bn="ওটিপি যাচাই করুন">Verify OTP</span>
+                    <span id="verifyOtpBtnLoading" class="loading hidden"></span>
+                </button>
+                <div id="recaptcha-container"></div>
+            </form>
+
+            <!-- Name input for new users (if not provided by auth provider) -->
+            <form class="auth-form hidden" id="nameRegistrationForm">
                 <div class="form-group">
                     <label for="userName" data-en="Your Name" data-bn="আপনার নাম">Your Name</label>
                     <input type="text" id="userName" data-en-placeholder="Enter your full name" data-bn-placeholder="আপনার পূর্ণ নাম লিখুন" placeholder="Enter your full name" required>
                 </div>
-                <button type="submit" class="register-btn">
-                    <span id="registerBtnText" data-en="Continue to Calculator" data-bn="ক্যালকুলেটরে যান">Continue to Calculator</span>
-                    <span id="registerBtnLoading" class="loading hidden"></span>
+                <button type="submit" class="auth-btn">
+                    <span id="completeRegistrationBtnText" data-en="Continue to Calculator" data-bn="ক্যালকুলেটরে যান">Continue to Calculator</span>
+                    <span id="completeRegistrationBtnLoading" class="loading hidden"></span>
                 </button>
             </form>
         </div>
@@ -972,8 +1110,11 @@
     <div class="container" id="mainContainer">
         <!-- Welcome Header -->
         <div class="welcome-header" id="welcomeHeader">
-            <div class="welcome-message" id="welcomeMessage">Welcome back!</div>
-            <div class="user-info" id="userInfo" data-en="Ready to calculate your electricity bill" data-bn="আপনার বিদ্যুৎ বিল গণনা করতে প্রস্তুত">Ready to calculate your electricity bill</div>
+            <div>
+                <div class="welcome-message" id="welcomeMessage">Welcome back!</div>
+                <div class="user-info" id="userInfo" data-en="Ready to calculate your electricity bill" data-bn="আপনার বিদ্যুৎ বিল গণনা করতে প্রস্তুত">Ready to calculate your electricity bill</div>
+            </div>
+            <button class="sign-out-btn" id="signOutBtn" data-en="Sign Out" data-bn="সাইন আউট">Sign Out</button>
         </div>
 
         <!-- PWA Install Banner -->
@@ -992,7 +1133,7 @@
                 <img src="https://i.ibb.co.com/4RwDKSd1/A-removebg-preview.png" alt="PowerCalc Pro Logo" crossorigin="anonymous">
             </div>
             <div class="company-name" data-en="PowerCalc Pro" data-bn="পাওয়ারক্যালক প্রো">PowerCalc Pro</div>
-            <div class="pwa-badge" data-en="PWA Enabled • Bangladesh" data-bn="PWA সক্রিয় • বাংলাদেশ">PWA Enabled • Bangladesh</div>
+            <div class="pwa-badge" data-en="PWA Enabled • Bangladesh" data-bn="PWA সক্রিয় • বাংলাদেশ">PWA সক্রিয় • বাংলাদেশ</div>
         </div>
 
         <div class="calculator">
@@ -1091,7 +1232,28 @@
         </div>
     </div>
 
-    <script>
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCDrd2yXI34CITKBVoqAZANhKAb0OfCf8o",
+            authDomain: "authentication-680af.firebaseapp.com",
+            projectId: "authentication-680af",
+            storageBucket: "authentication-680af.firebasestorage.app",
+            messagingSenderId: "957976776655",
+            appId: "1:957976776655:web:c069165c3265ad52b58cba",
+            measurementId: "G-TL8P6K80NG"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+
         // Language system
         let currentLanguage = localStorage.getItem('powerCalcLanguage') || 'en';
         
@@ -1108,7 +1270,16 @@
                     validNumbers: 'Please enter valid numbers for both readings.',
                     negativeValues: 'Readings cannot be negative values.',
                     currentLessThanPrevious: 'Present KW/h cannot be less than Past KW/h.',
-                    enterName: 'Please enter your name.'
+                    enterName: 'Please enter your name.',
+                    authFailed: 'Authentication failed. Please check your credentials or try again.',
+                    emailInUse: 'Email already in use. Please sign in or use a different email.',
+                    weakPassword: 'Password should be at least 6 characters.',
+                    invalidEmail: 'Invalid email address.',
+                    invalidPhoneNumber: 'Please enter a valid phone number (e.g., +8801XXXXXXXXX).',
+                    otpSent: 'OTP sent to your phone. Please enter it below.',
+                    otpFailed: 'Failed to send OTP. Please try again.',
+                    invalidOtp: 'Invalid OTP. Please try again.',
+                    tooManyRequests: 'Too many requests. Please try again later.'
                 }
             },
             bn: {
@@ -1123,7 +1294,16 @@
                     validNumbers: 'অনুগ্রহ করে উভয় রিডিংয়ের জন্য বৈধ সংখ্যা লিখুন।',
                     negativeValues: 'রিডিং নেতিবাচক মান হতে পারে না।',
                     currentLessThanPrevious: 'বর্তমান KW/h পূর্ববর্তী KW/h এর চেয়ে কম হতে পারে না।',
-                    enterName: 'অনুগ্রহ করে আপনার নাম লিখুন।'
+                    enterName: 'অনুগ্রহ করে আপনার নাম লিখুন।',
+                    authFailed: 'প্রমাণীকরণ ব্যর্থ হয়েছে। আপনার শংসাপত্র পরীক্ষা করুন বা আবার চেষ্টা করুন।',
+                    emailInUse: 'ইমেল ইতিমধ্যে ব্যবহৃত হয়েছে। অনুগ্রহ করে সাইন ইন করুন বা অন্য ইমেল ব্যবহার করুন।',
+                    weakPassword: 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।',
+                    invalidEmail: 'অবৈধ ইমেল ঠিকানা।',
+                    invalidPhoneNumber: 'অনুগ্রহ করে একটি বৈধ ফোন নম্বর লিখুন (যেমন: +8801XXXXXXXXX)।',
+                    otpSent: 'আপনার ফোনে ওটিপি পাঠানো হয়েছে। নিচে এটি লিখুন।',
+                    otpFailed: 'ওটিপি পাঠাতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।',
+                    invalidOtp: 'অবৈধ ওটিপি। আবার চেষ্টা করুন।',
+                    tooManyRequests: 'অনেক বেশি অনুরোধ। অনুগ্রহ করে পরে আবার চেষ্টা করুন।'
                 }
             }
         };
@@ -1131,7 +1311,11 @@
         // PWA Variables
         let deferredPrompt;
         let isInstalled = false;
-        let userData = null;
+        let userData = null; // This will now be populated by Firebase user
+
+        // Recaptcha Verifier for Phone Auth
+        let recaptchaVerifier;
+        let confirmationResult;
 
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
@@ -1143,7 +1327,8 @@
                         const urlsToCache = [
                             '/',
                             '/index.html',
-                            'https://i.ibb.co.com/4RwDKSd1/A-removebg-preview.png'
+                            'https://i.ibb.co.com/4RwDKSd1/A-removebg-preview.png',
+                            'https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_of_Google_G_Suite.png' // Google logo
                         ];
 
                         // Install event
@@ -1199,9 +1384,10 @@
         // Language Toggle Functionality
         document.addEventListener('DOMContentLoaded', () => {
             initializeLanguage();
-            initializeApp();
             setCurrentMonthAndYear();
             setupLanguageToggle();
+            setupAuthListeners();
+            setupRecaptcha();
         });
 
         function setupLanguageToggle() {
@@ -1298,34 +1484,53 @@
             }
         }
 
-        async function initializeApp() {
-            // Show loading screen
+        // Firebase Authentication State Listener
+        onAuthStateChanged(auth, async (user) => {
             const loadingScreen = document.getElementById('loadingScreen');
-            const registrationScreen = document.getElementById('registrationScreen');
+            const authScreen = document.getElementById('authScreen');
             const mainContainer = document.getElementById('mainContainer');
 
             // Simulate loading time
-            await new Promise(resolve => setTimeout(resolve, 2500));
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
-            // Check if user data exists
-            userData = JSON.parse(localStorage.getItem('powerCalcUserData'));
+            if (user) {
+                // User is signed in
+                console.log("User signed in:", user);
+                userData = {
+                    uid: user.uid,
+                    name: user.displayName || localStorage.getItem('powerCalcUserName') || user.email || 'User',
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    registrationDate: new Date().toISOString()
+                };
+                localStorage.setItem('powerCalcUserData', JSON.stringify(userData));
+                localStorage.setItem('powerCalcUserName', userData.name); // Store name separately for persistence
 
-            if (userData) {
-                // User exists, go directly to main app
                 loadingScreen.classList.add('hidden');
+                authScreen.classList.remove('show');
                 setTimeout(() => {
                     loadingScreen.style.display = 'none';
+                    authScreen.style.display = 'none';
                     showMainApp();
                 }, 500);
             } else {
-                // New user, show registration
+                // User is signed out
+                console.log("User signed out.");
+                userData = null;
+                localStorage.removeItem('powerCalcUserData');
+                localStorage.removeItem('powerCalcUserName');
+
                 loadingScreen.classList.add('hidden');
+                mainContainer.classList.remove('show');
                 setTimeout(() => {
                     loadingScreen.style.display = 'none';
-                    registrationScreen.classList.add('show');
+                    mainContainer.style.display = 'none';
+                    authScreen.classList.add('show');
+                    document.getElementById('nameRegistrationForm').classList.add('hidden'); // Hide name form initially
+                    document.getElementById('authError').textContent = ''; // Clear any previous errors
                 }, 500);
             }
-        }
+        });
 
         function showMainApp() {
             const mainContainer = document.getElementById('mainContainer');
@@ -1348,38 +1553,213 @@
             welcomeMessage.textContent = welcomeText;
         }
 
-        // Registration Form Handler
-        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('userName').value.trim();
-            const registerBtnText = document.getElementById('registerBtnText');
-            const registerBtnLoading = document.getElementById('registerBtnLoading');
+        function showAuthError(message) {
+            const authErrorDiv = document.getElementById('authError');
+            authErrorDiv.textContent = message;
+        }
 
-            if (!name) {
-                alert(translations[currentLanguage].errors.enterName);
-                return;
+        function setLoadingState(buttonId, isLoading) {
+            const btnText = document.getElementById(`${buttonId}Text`);
+            const btnLoading = document.getElementById(`${buttonId}Loading`);
+            const btn = document.getElementById(buttonId);
+
+            if (isLoading) {
+                btnText.classList.add('hidden');
+                btnLoading.classList.remove('hidden');
+                btn.disabled = true;
+            } else {
+                btnText.classList.remove('hidden');
+                btnLoading.classList.add('hidden');
+                btn.disabled = false;
             }
+        }
 
-            // Show loading
-            registerBtnText.classList.add('hidden');
-            registerBtnLoading.classList.remove('hidden');
+        function setupAuthListeners() {
+            // Google Sign-in
+            document.getElementById('googleSignInBtn').addEventListener('click', async () => {
+                setLoadingState('googleSignInBtn', true);
+                showAuthError('');
+                const provider = new GoogleAuthProvider();
+                try {
+                    const result = await signInWithPopup(auth, provider);
+                    // User signed in, onAuthStateChanged will handle the rest
+                    console.log("Google sign-in successful:", result.user);
+                    // If user has no display name, prompt for name
+                    if (!result.user.displayName) {
+                        document.getElementById('nameRegistrationForm').classList.remove('hidden');
+                        document.getElementById('userName').value = result.user.email.split('@')[0]; // Pre-fill with email part
+                    }
+                } catch (error) {
+                    console.error("Google sign-in error:", error);
+                    showAuthError(translations[currentLanguage].errors.authFailed);
+                } finally {
+                    setLoadingState('googleSignInBtn', false);
+                }
+            });
 
-            // Simulate processing
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // Email/Password Sign-in
+            document.getElementById('signInBtn').addEventListener('click', async (e) => {
+                e.preventDefault();
+                setLoadingState('signInBtn', true);
+                showAuthError('');
+                const email = document.getElementById('authEmail').value;
+                const password = document.getElementById('authPassword').value;
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    // User signed in, onAuthStateChanged will handle the rest
+                } catch (error) {
+                    console.error("Email sign-in error:", error);
+                    showAuthError(translations[currentLanguage].errors.authFailed);
+                } finally {
+                    setLoadingState('signInBtn', false);
+                }
+            });
 
-            // Save user data
-            userData = { name, registrationDate: new Date().toISOString() };
-            localStorage.setItem('powerCalcUserData', JSON.stringify(userData));
+            // Email/Password Sign-up
+            document.getElementById('signUpBtn').addEventListener('click', async (e) => {
+                e.preventDefault();
+                setLoadingState('signUpBtn', true);
+                showAuthError('');
+                const email = document.getElementById('authEmail').value;
+                const password = document.getElementById('authPassword').value;
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    console.log("Email sign-up successful:", userCredential.user);
+                    // Prompt for name after sign-up
+                    document.getElementById('nameRegistrationForm').classList.remove('hidden');
+                    document.getElementById('userName').value = email.split('@')[0]; // Pre-fill with email part
+                } catch (error) {
+                    console.error("Email sign-up error:", error);
+                    if (error.code === 'auth/email-already-in-use') {
+                        showAuthError(translations[currentLanguage].errors.emailInUse);
+                    } else if (error.code === 'auth/weak-password') {
+                        showAuthError(translations[currentLanguage].errors.weakPassword);
+                    } else if (error.code === 'auth/invalid-email') {
+                        showAuthError(translations[currentLanguage].errors.invalidEmail);
+                    } else {
+                        showAuthError(translations[currentLanguage].errors.authFailed);
+                    }
+                } finally {
+                    setLoadingState('signUpBtn', false);
+                }
+            });
 
-            // Hide registration and show main app
-            const registrationScreen = document.getElementById('registrationScreen');
-            registrationScreen.classList.remove('show');
-            
-            setTimeout(() => {
-                showMainApp();
-            }, 300);
-        });
+            // Phone Auth - Send OTP
+            document.getElementById('sendOtpBtn').addEventListener('click', async () => {
+                setLoadingState('sendOtpBtn', true);
+                showAuthError('');
+                const phoneNumber = document.getElementById('phoneNumber').value;
+
+                if (!phoneNumber.startsWith('+') || phoneNumber.length < 10) {
+                    showAuthError(translations[currentLanguage].errors.invalidPhoneNumber);
+                    setLoadingState('sendOtpBtn', false);
+                    return;
+                }
+
+                try {
+                    confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
+                    document.getElementById('otpInputGroup').classList.remove('hidden');
+                    document.getElementById('verifyOtpBtn').classList.remove('hidden');
+                    document.getElementById('sendOtpBtn').classList.add('hidden'); // Hide send OTP button
+                    showAuthError(translations[currentLanguage].errors.otpSent);
+                } catch (error) {
+                    console.error("Error sending OTP:", error);
+                    if (error.code === 'auth/too-many-requests') {
+                        showAuthError(translations[currentLanguage].errors.tooManyRequests);
+                    } else {
+                        showAuthError(translations[currentLanguage].errors.otpFailed);
+                    }
+                } finally {
+                    setLoadingState('sendOtpBtn', false);
+                }
+            });
+
+            // Phone Auth - Verify OTP
+            document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
+                setLoadingState('verifyOtpBtn', true);
+                showAuthError('');
+                const otpCode = document.getElementById('otpCode').value;
+
+                try {
+                    const result = await confirmationResult.confirm(otpCode);
+                    console.log("Phone verification successful:", result.user);
+                    // User signed in, onAuthStateChanged will handle the rest
+                    // If user has no display name, prompt for name
+                    if (!result.user.displayName) {
+                        document.getElementById('nameRegistrationForm').classList.remove('hidden');
+                        document.getElementById('userName').value = result.user.phoneNumber; // Pre-fill with phone number
+                    }
+                } catch (error) {
+                    console.error("Error verifying OTP:", error);
+                    showAuthError(translations[currentLanguage].errors.invalidOtp);
+                } finally {
+                    setLoadingState('verifyOtpBtn', false);
+                }
+            });
+
+            // Complete Name Registration (for email/phone users or Google users without display name)
+            document.getElementById('nameRegistrationForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                setLoadingState('completeRegistrationBtn', true);
+                showAuthError('');
+                const userNameInput = document.getElementById('userName');
+                const name = userNameInput.value.trim();
+
+                if (!name) {
+                    showAuthError(translations[currentLanguage].errors.enterName);
+                    setLoadingState('completeRegistrationBtn', false);
+                    return;
+                }
+
+                try {
+                    await updateProfile(auth.currentUser, { displayName: name });
+                    console.log("User profile updated with name:", name);
+                    // Update local storage and proceed to main app
+                    userData.name = name;
+                    localStorage.setItem('powerCalcUserData', JSON.stringify(userData));
+                    localStorage.setItem('powerCalcUserName', name);
+                    document.getElementById('authScreen').classList.remove('show');
+                    showMainApp();
+                } catch (error) {
+                    console.error("Error updating profile:", error);
+                    showAuthError("Failed to save name. Please try again.");
+                } finally {
+                    setLoadingState('completeRegistrationBtn', false);
+                }
+            });
+
+            // Sign Out
+            document.getElementById('signOutBtn').addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    // onAuthStateChanged will handle redirecting to auth screen
+                } catch (error) {
+                    console.error("Error signing out:", error);
+                    alert("Failed to sign out. Please try again.");
+                }
+            });
+        }
+
+        function setupRecaptcha() {
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                'size': 'normal',
+                'callback': (response) => {
+                    // reCAPTCHA solved, allow signInWithPhoneNumber.
+                    console.log("reCAPTCHA solved!");
+                },
+                'expired-callback': () => {
+                    // Response expired. Ask user to solve reCAPTCHA again.
+                    console.log("reCAPTCHA expired.");
+                    showAuthError("reCAPTCHA expired. Please try sending OTP again.");
+                    document.getElementById('sendOtpBtn').classList.remove('hidden');
+                    document.getElementById('otpInputGroup').classList.add('hidden');
+                    document.getElementById('verifyOtpBtn').classList.add('hidden');
+                }
+            });
+            recaptchaVerifier.render().then((widgetId) => {
+                window.recaptchaWidgetId = widgetId;
+            });
+        }
 
         // PWA Install Prompt
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -1513,7 +1893,7 @@
                 ...calculation,
                 date: new Date().toLocaleString(currentLanguage === 'bn' ? 'bn-BD' : 'en-BD'),
                 id: Date.now(),
-                userName: userData.name,
+                userName: userData ? userData.name : 'Guest', // Use authenticated user name
                 language: currentLanguage
             });
             
@@ -1726,4 +2106,3 @@
     </script>
 </body>
 </html>
-
